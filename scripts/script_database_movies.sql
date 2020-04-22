@@ -12,5 +12,13 @@ CREATE TABLE `pelicula` (
   `puntuacion` int(2),
   `poster` varchar(300) NOT NULL,
   `trama` varchar(700),
-  PRIMARY KEY (`id`)
+  `genero_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`genero_id`) REFERENCES `genero`(`id`)
 );
+
+CREATE TABLE `genero`(
+  `id`int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`)
+)

@@ -2,9 +2,10 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var cors = require('cors');
+var _ = require('lodash');
 
 //Referencias controladores
-var controladorPeliculas = require('./controladores/peliculas');
+var controladorPeliculas = require('./controladores/controlador_peliculas');
 
 var app = express();
 
@@ -15,6 +16,9 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(bodyParser.json());
+
+//RUTAS
+app.get('/peliculas', controladorPeliculas.todasLasPeliculas);
 
 //seteamos el puerto en el cual va a escuchar los pedidos la aplicación
 var puerto = '8080';
