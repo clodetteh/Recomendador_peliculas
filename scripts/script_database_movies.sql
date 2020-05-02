@@ -22,3 +22,16 @@ CREATE TABLE `genero`(
   `nombre` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
 )
+
+CREATE TABLE `actor`(
+  `id`int NOT NULL AUTO_INCREMENT,
+  `nombre`varchar(70),
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `actor_pelicula`(
+  `id`int NOT NULL AUTO_INCREMENT,
+  `actor_id` int,
+  `pelicula_id` int,
+  PRIMARY KEY(`id`)
+)

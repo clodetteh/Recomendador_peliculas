@@ -67,11 +67,8 @@ function todasLasPeliculas(req, res){
             };
             
             res.send(JSON.stringify(response));
-        });
-        
+        });  
     });
-
-
 };
 
 function buscadorGenero(req, res){
@@ -87,11 +84,46 @@ function buscadorGenero(req, res){
             return res.status(404).send("Hubo un error en la consulta");
         }
         var response = {'generos' : resultado};
+
         res.send(JSON.stringify(response));
     });
 };
 
+function informacionPeliculas(req, res){
+    var id = req.params.id;
+    var sql = `select *, nombre from pelicula join genero on genero_id = genero.id where pelicula.id = ${id}`;
+    var sqlActores = `select actor.nombre from pelicula join actor_pelicula on pelicula.id = actor_pelicula.pelicula_id join actor on actor_pelicula.actor_id = actor.id where pelicula.id = ${id}`;
+
+    con.query(sql, function(error, resultado, fields){
+        if(error){
+            console.log("Hubo un error en la consulta", error.message);
+            return res.status(404).send("Hubo un error en la consulta");
+        };
+
+        var actores = null;
+        con.query(sqlActores, function(error, resultadoActores, fields){
+            if(error){
+                console.log("Hubo un error en la consulta", error.message);
+                return res.status(404).send("Hubo un error en la consulta");
+            }
+            
+            actores = resultadoActores;
+            var response = {
+                'pelicula': resultado[0],
+                'actores' : actores,
+            };
+            res.send(JSON.stringify(response));
+        });  
+    });
+};
+
+function recomendador(req, res){
+    var rescomendacion = req.query.recomendacion;
+}
+
 module.exports = {
     todasLasPeliculas: todasLasPeliculas,
     buscadorGenero: buscadorGenero,
+    informacionPeliculas : informacionPeliculas,
+    recomendador : recomendador,
 };
