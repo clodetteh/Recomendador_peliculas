@@ -118,7 +118,46 @@ function informacionPeliculas(req, res){
 };
 
 function recomendador(req, res){
-    var rescomendacion = req.query.recomendacion;
+    var fields = {
+        genero: { column: 'genero.nombre', condition: '='},
+        anio_inicio:  { column: 'anio', condition: '>='},
+        anio_fin: { column: 'anio', condition: '<='},
+        puntuacion : {column : 'puntuacion', condition: '='}
+    }
+
+    var statement = '';
+    var conditionCount = 0;
+    ['genero', 'puntuacion', 'anio_inicio', 'anio_fin'].forEach((filtro) => {
+        if(req.query[filtro] !== undefined) {
+            if(conditionCount === 0) {
+                statement += ` where`;
+            } else {
+                statement += ` and`;
+            }
+            var x = req.query[filtro]
+            if (isNaN(x)) {
+                x = `'${x}'`
+            }
+            statement += ` ${fields[filtro].column} ${fields[filtro].condition} ${x}`;
+            conditionCount ++;
+        }
+    });
+
+    var sql = `select *, nombre from pelicula join genero on genero_id = genero.id ${statement}`
+   
+    con.query(sql, function(error, resultado, fields){
+        if(error){
+            console.log("Hubo un error en la consulta", error.message);
+            return res.status(404).send("Hubo un error en la consulta");
+        };
+
+        var response = {
+            'peliculas' : resultado,
+        };
+        
+        res.send(JSON.stringify(response));
+    });
+
 }
 
 module.exports = {
