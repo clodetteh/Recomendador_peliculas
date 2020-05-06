@@ -143,7 +143,7 @@ function recomendador(req, res){
         }
     });
 
-    var sql = `select *, nombre from pelicula join genero on genero_id = genero.id ${statement}`
+    var sql = `select *, nombre, pelicula.id from pelicula join genero on genero_id = genero.id ${statement}`
    
     con.query(sql, function(error, resultado, fields){
         if(error){
